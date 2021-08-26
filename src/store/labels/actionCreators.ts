@@ -84,6 +84,15 @@ export function updateLabelNames(labels: LabelName[]) {
     }
 }
 
+export function updateProperties(labels: LabelName[]) {
+    return {
+        type: Action.UPDATE_LABEL_NAMES,
+        payload: {
+            labels
+        }
+    }
+}
+
 export function updateFirstLabelCreatedFlag(firstLabelCreatedFlag: boolean) {
     return {
         type: Action.UPDATE_FIRST_LABEL_CREATED_FLAG,

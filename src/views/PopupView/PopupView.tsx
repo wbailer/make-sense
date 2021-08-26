@@ -5,6 +5,7 @@ import { AppState } from "../../store";
 import { connect } from "react-redux";
 import LoadLabelsPopup from "./LoadLabelNamesPopup/LoadLabelNamesPopup";
 import InsertLabelNamesPopup from "./InsertLabelNamesPopup/InsertLabelNamesPopup";
+import FewShotProjectProperties from "./FewShotProjectProperties/FewShotProjectProperties";
 import ExitProjectPopup from "./ExitProjectPopup/ExitProjectPopup";
 import LoadMoreImagesPopup from "./LoadMoreImagesPopup/LoadMoreImagesPopup";
 import { LoadModelPopup } from "./LoadModelPopup/LoadModelPopup";
@@ -50,6 +51,10 @@ const PopupView: React.FC<IProps> = ({ activePopupType }) => {
                     color={CSSHelper.getLeadingColor()}
                     loading={true}
                 />;
+            case PopupWindowType.FEW_SHOT_PROPERTIES:
+                return <FewShotProjectProperties isUpdate={true} />;
+            case PopupWindowType.FEW_SHOT_PROPERTIES_INIT:
+                return <FewShotProjectProperties isUpdate={false} />;
             default:
                 return null;
         }

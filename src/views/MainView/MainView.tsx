@@ -12,7 +12,7 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import ImagesDropZone from "./ImagesDropZone/ImagesDropZone";
 
 const MainView: React.FC = () => {
-    const [projectInProgress, setProjectInProgress] = useState(false);
+    const [projectInProgress, setProjectInProgress] = useState(true);
     const [projectCanceled, setProjectCanceled] = useState(false);
 
     const startProject = () => {
@@ -109,12 +109,6 @@ const MainView: React.FC = () => {
                         src={"ico/main-image-color.png"}
                     />
                 </div>
-                <div className="EditorFeaturesWrapper">
-                    {getEditorFeatureTiles()}
-                </div>
-                <div className="TriangleVertical">
-                    <div className="TriangleVerticalContent"/>
-                </div>
                 {projectInProgress && <TextButton
                     label={"Go Back"}
                     onClick={endProject}
@@ -123,9 +117,7 @@ const MainView: React.FC = () => {
             <div className="RightColumn">
                 <div/>
                 <ImagesDropZone/>
-                <div className="SocialMediaWrapper">
-                    {getSocialMediaButtons({width: 30, height: 30})}
-                </div>
+
                 {!projectInProgress && <TextButton
                     label={"Get Started"}
                     onClick={startProject}

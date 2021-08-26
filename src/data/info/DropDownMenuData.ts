@@ -59,6 +59,14 @@ export const DropDownMenuData: DropDownMenuNode[] = [
                 disabled: false,
                 onClick: () => store.dispatch(updateActivePopupType(PopupWindowType.LOAD_AI_MODEL))
             },
+            {
+                name: "Edit Few Shot Project Properties",
+                description: "Modify few shot learning settings",
+                imageSrc: "ico/tags.png",
+                imageAlt: "properties",
+                disabled: false,
+                onClick: () => store.dispatch(updateActivePopupType(PopupWindowType.FEW_SHOT_PROPERTIES))
+            },
         ]
     },
     {

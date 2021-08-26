@@ -34,7 +34,8 @@ const ImagesDropZone: React.FC<IProps> = ({updateActiveImageIndex, addImageData,
             });
             updateActiveImageIndex(0);
             addImageData(acceptedFiles.map((fileData:File) => ImageDataUtil.createImageDataFromFileData(fileData)));
-            updateActivePopupType(PopupWindowType.INSERT_LABEL_NAMES);
+            updateActivePopupType(PopupWindowType.FEW_SHOT_PROPERTIES_INIT);
+            //updateActivePopupType(PopupWindowType.INSERT_LABEL_NAMES);
         }
     };
 
@@ -84,11 +85,7 @@ const ImagesDropZone: React.FC<IProps> = ({updateActiveImageIndex, addImageData,
                     isDisabled={!acceptedFiles.length}
                     onClick={() => startEditor(ProjectType.OBJECT_DETECTION)}
                 />
-                <TextButton
-                    label={"Image recognition"}
-                    isDisabled={!acceptedFiles.length}
-                    onClick={() => startEditor(ProjectType.IMAGE_RECOGNITION)}
-                />
+            
             </div>
         </div>
     )
