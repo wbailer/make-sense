@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import './FewShotProjectProperties.scss'
 import { GenericYesNoPopup } from "../GenericYesNoPopup/GenericYesNoPopup";
 import { PopupWindowType } from "../../../data/enums/PopupWindowType";
-import { updateProperties } from "../../../store/labels/actionCreators";
+import { updateProperties } from "../../../store/fewshot/actionCreators";
 import { updateActivePopupType } from "../../../store/general/actionCreators";
 import { AppState } from "../../../store";
 import { connect } from "react-redux";
@@ -12,18 +12,20 @@ import { ImageButton } from "../../Common/ImageButton/ImageButton";
 import uuidv4 from 'uuid/v4';
 import { LabelName } from "../../../store/labels/types";
 import { LabelUtil } from "../../../utils/LabelUtil";
-import { LabelsSelector } from "../../../store/selectors/LabelsSelector";
+import { FewshotSelector } from "../../../store/selectors/FewshotSelector";
 import { LabelActions } from "../../../logic/actions/LabelActions";
 import { ProjectType } from "../../../data/enums/ProjectType";
 import {IBaseModelData} from "../../../interfaces/IBaseModelData";
 import {BaseModel} from "../../../data/enums/BaseModel";
+import {getBaseModel} from "../../../data/enums/BaseModel";
+import {getBaseModelLabel} from "../../../data/enums/BaseModel";
 import {BaseModelData} from "../../../data/BaseModelData";
 import {BaseModelDataMap} from "../../../data/BaseModelData";
 
 interface IProps {
     projectType: ProjectType;
     updateActivePopupType: (activePopupType: PopupWindowType) => any;
-    updateProperties: (properties: LabelName[]) => any;
+    updateProperties: (properties: Map<String,String>) => any;
     isUpdate: boolean;
 }
 
@@ -34,68 +36,24 @@ const FewShotProjectProperties: React.FC<IProps> = (
         updateProperties,
         isUpdate
     }) => {
-    const initialLabels = LabelUtil.convertLabelNamesListToMap(LabelsSelector.getLabelNames());
-    const [labelNames, setLabelNames] = useState(initialLabels);
-    const [baseModel, setBaseModel] = useState(null);
+    const initialProps = FewshotSelector.getProperties();
+    const [properties, setProperties] = useState(initialProps);
 
-    const addHandle = () => {
-        const newLabelNames = { ...labelNames, [uuidv4()]: "" };
-        setLabelNames(newLabelNames);
-    };
-
-    const deleteHandle = (key: string) => {
-        const newLabelNames = { ...labelNames };
-        delete newLabelNames[key];
-        setLabelNames(newLabelNames);
-    };
-
-    const handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
-        if (event.key === 'Enter') {
-            addHandle();
-        }
-    }
-
-    const labelInputs = Object.keys(labelNames).map((key: string) => {
-        return <div className="LabelEntry" key={key}>
-            <TextInput
-                key={key}
-                value={labelNames[key]}
-                isPassword={false}
-                onChange={(event: React.ChangeEvent<HTMLInputElement>) => onChange(key, event.target.value)}
-                label={"Insert label"}
-                onKeyUp={(event: React.KeyboardEvent<HTMLInputElement>) => handleKeyUp(event)}
-            />
-            <ImageButton
-                image={"ico/trash.png"}
-                imageAlt={"remove_label"}
-                buttonSize={{ width: 30, height: 30 }}
-                onClick={() => deleteHandle(key)}
-            />
-        </div>
-    });
 
     const onChange = (key: string, value: string) => {
-        const newLabelNames = { ...labelNames, [key]: value };
-        setLabelNames(newLabelNames);
+        const newProperties = properties;
+        properties[key]=value; 
+        setProperties(newProperties);
     };
 
     const onCreateAccept = () => {
-        const labelNamesList: string[] = extractLabelNamesList();
-        if (labelNamesList.length > 0) {
-            updateProperties(LabelUtil.convertMapToLabelNamesList(labelNames));
-        }
-        updateActivePopupType(PopupWindowType.INSERT_LABEL_NAMES);
+        updateProperties(properties);
+        updateActivePopupType(PopupWindowType.FEW_SHOT_PROPERTIES);
     };
 
     const onUpdateAccept = () => {
-        const labelNamesList: string[] = extractLabelNamesList();
-        const updatedLabelNamesList: LabelName[] = LabelUtil.convertMapToLabelNamesList(labelNames);
-        const missingIds: string[] = LabelUtil.labelNamesIdsDiff(LabelsSelector.getLabelNames(), updatedLabelNamesList);
-        LabelActions.removeLabelNames(missingIds);
-        if (labelNamesList.length > 0) {
-            updateProperties(LabelUtil.convertMapToLabelNamesList(labelNames));
-            updateActivePopupType(null);
-        }
+
+        updateProperties(properties);
     };
 
     const onCreateReject = () => {
@@ -107,12 +65,9 @@ const FewShotProjectProperties: React.FC<IProps> = (
     };
 
 
-    const extractLabelNamesList = (): string[] => {
-        return Object.values(labelNames).filter((value => !!value)) as string[];
-    };
 
     const onSelect = (baseModel: BaseModel) => {
-        setBaseModel(baseModel);
+        properties['basetype'] = getBaseModelLabel(baseModel);
     };
 
     const getOptions = (baseModelType: IBaseModelData[]) => {
@@ -122,7 +77,7 @@ const FewShotProjectProperties: React.FC<IProps> = (
                 onClick={() => onSelect(entry.type)}
                 key={entry.type}
             >
-                {entry.type === baseModel ?
+                {entry.type === getBaseModel(properties['basetype']) ?
                     <img
                         draggable={false}
                         src={"ico/checkbox-checked.png"}
@@ -161,6 +116,7 @@ const FewShotProjectProperties: React.FC<IProps> = (
                         
                             <div className="Options">
                                {getOptions(BaseModelData['COCO60'])}
+                               {getOptions(BaseModelData['COCO80'])}
                             </div>
                
                         <div className="Message">
@@ -168,38 +124,36 @@ const FewShotProjectProperties: React.FC<IProps> = (
                            "Data for the novel classes to be trained:"
                         }
                         </div>
+                        <div className="LabelEntry" key='dsname'>
+                            <TextInput
+                                key='dsname'
+                                value={'mydataset'}
+                                isPassword={false}
+                                onChange={(event: React.ChangeEvent<HTMLInputElement>) => onChange('dsname', event.target.value)}
+                                label={"Dataset name"}
+                            />
+                        </div>
                         <TextInput
-                            key='dsname'
-                            value={'mydataset'}
-                            isPassword={false}
-                            onChange={(event: React.ChangeEvent<HTMLInputElement>) => onChange('dsname', event.target.value)}
-                            label={"Dataset name"}
-                            onKeyUp={(event: React.KeyboardEvent<HTMLInputElement>) => handleKeyUp(event)}
-                        />
-                        <TextInput
-                            key='dsname'
+                            key='dsname1'
                             value={'datasets/mydataset/train.json'}
                             isPassword={false}
-                            onChange={(event: React.ChangeEvent<HTMLInputElement>) => onChange('dsname', event.target.value)}
+                            onChange={(event: React.ChangeEvent<HTMLInputElement>) => onChange('dsname1', event.target.value)}
                             label={"Dataset annotation file"}
-                            onKeyUp={(event: React.KeyboardEvent<HTMLInputElement>) => handleKeyUp(event)}
                         />
                         <TextInput
-                            key='dsname'
+                            key='dsname2'
                             value={'datasets/mydataset/images'}
                             isPassword={false}
-                            onChange={(event: React.ChangeEvent<HTMLInputElement>) => onChange('dsname', event.target.value)}
+                            onChange={(event: React.ChangeEvent<HTMLInputElement>) => onChange('dsname2', event.target.value)}
                             label={"Dataset image directory"}
-                            onKeyUp={(event: React.KeyboardEvent<HTMLInputElement>) => handleKeyUp(event)}
                         />
                         <TextInput
-                            key='dsname'
+                            key='dsname3'
                             value={'0.7'}
                             isPassword={false}
-                            onChange={(event: React.ChangeEvent<HTMLInputElement>) => onChange('dsname', event.target.value)}
+                            onChange={(event: React.ChangeEvent<HTMLInputElement>) => onChange('dsname3', event.target.value)}
                             label={"Share of data to be used for training"}
-                            onKeyUp={(event: React.KeyboardEvent<HTMLInputElement>) => handleKeyUp(event)}
-                        />
+                         />
                         </div>
                     </Scrollbars> 
                         
