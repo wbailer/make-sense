@@ -60,12 +60,20 @@ export const DropDownMenuData: DropDownMenuNode[] = [
                 onClick: () => store.dispatch(updateActivePopupType(PopupWindowType.LOAD_AI_MODEL))
             },
             {
-                name: "Edit Few Shot Project Properties",
+                name: "Edit Few-Shot Project Properties",
                 description: "Modify few shot learning settings",
-                imageSrc: "ico/tags.png",
+                imageSrc: "ico/fsprop.png",
                 imageAlt: "properties",
                 disabled: false,
                 onClick: () => store.dispatch(updateActivePopupType(PopupWindowType.FEW_SHOT_PROPERTIES))
+            },
+            {
+                name: "Export Few-Shot Training Data",
+                description: "Export configuration and scripts for few-shot training",
+                imageSrc: "ico/export-fs.png",
+                imageAlt: "properties",
+                disabled: false,
+                onClick: () => store.dispatch(updateActivePopupType(PopupWindowType.EXPORT_FEW_SHOT))
             },
         ]
     },
