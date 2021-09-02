@@ -8,19 +8,13 @@ import { AppState } from "../../../store";
 import { connect } from "react-redux";
 import Scrollbars from 'react-custom-scrollbars';
 import TextInput from "../../Common/TextInput/TextInput";
-import { ImageButton } from "../../Common/ImageButton/ImageButton";
-import uuidv4 from 'uuid/v4';
-import { LabelName } from "../../../store/labels/types";
-import { LabelUtil } from "../../../utils/LabelUtil";
 import { FewshotSelector } from "../../../store/selectors/FewshotSelector";
-import { LabelActions } from "../../../logic/actions/LabelActions";
 import { ProjectType } from "../../../data/enums/ProjectType";
 import {IBaseModelData} from "../../../interfaces/IBaseModelData";
 import {BaseModel} from "../../../data/enums/BaseModel";
 import {getBaseModel} from "../../../data/enums/BaseModel";
 import {getBaseModelLabel} from "../../../data/enums/BaseModel";
 import {BaseModelData} from "../../../data/BaseModelData";
-import {BaseModelDataMap} from "../../../data/BaseModelData";
 
 interface IProps {
     projectType: ProjectType;
@@ -37,23 +31,23 @@ const FewShotProjectProperties: React.FC<IProps> = (
         isUpdate
     }) => {
     const initialProps = FewshotSelector.getProperties();
-    const [properties, setProperties] = useState(initialProps);
+    const [properties, setProperties] = useState<Map<String,String>>(initialProps);
 
 
     const onChange = (key: string, value: string) => {
-        const newProperties = properties;
-        properties[key]=value; 
+        const newProperties = { ...properties, [key]: value };
         setProperties(newProperties);
     };
 
     const onCreateAccept = () => {
         updateProperties(properties);
-        updateActivePopupType(PopupWindowType.FEW_SHOT_PROPERTIES);
+        updateActivePopupType(PopupWindowType.INSERT_LABEL_NAMES);
     };
 
     const onUpdateAccept = () => {
 
         updateProperties(properties);
+        updateActivePopupType(null);
     };
 
     const onCreateReject = () => {
@@ -67,7 +61,8 @@ const FewShotProjectProperties: React.FC<IProps> = (
 
 
     const onSelect = (baseModel: BaseModel) => {
-        properties['basetype'] = getBaseModelLabel(baseModel);
+        const newProperties = { ...properties, ['basetype']: getBaseModelLabel(baseModel) };
+        setProperties(newProperties);
     };
 
     const getOptions = (baseModelType: IBaseModelData[]) => {
@@ -98,11 +93,6 @@ const FewShotProjectProperties: React.FC<IProps> = (
     const renderContent = () => {
         return (<div className="FewShotProjectProperties">
             <div className="RightContainer">
-                <div className="Message">
-                    {
-                        "Set properties of few shot learning project"
-                    }
-                </div>
                 <Scrollbars>
                 <div className="FewShotProjectPropertiesContent">
                                                
@@ -124,34 +114,33 @@ const FewShotProjectProperties: React.FC<IProps> = (
                            "Data for the novel classes to be trained:"
                         }
                         </div>
-                        <div className="LabelEntry" key='dsname'>
-                            <TextInput
-                                key='dsname'
-                                value={'mydataset'}
-                                isPassword={false}
-                                onChange={(event: React.ChangeEvent<HTMLInputElement>) => onChange('dsname', event.target.value)}
-                                label={"Dataset name"}
-                            />
-                        </div>
                         <TextInput
-                            key='dsname1'
-                            value={'datasets/mydataset/train.json'}
+                            key='dsname'
+                            value={properties['name'] } 
                             isPassword={false}
-                            onChange={(event: React.ChangeEvent<HTMLInputElement>) => onChange('dsname1', event.target.value)}
+                            onChange={(event: React.ChangeEvent<HTMLInputElement>) => onChange('name', event.target.value)}
+                            label={"Dataset name"}
+                        />
+
+                        <TextInput
+                            key='dsfile'
+                            value={properties['file'] } 
+                            isPassword={false}
+                            onChange={(event: React.ChangeEvent<HTMLInputElement>) => onChange('file', event.target.value)}
                             label={"Dataset annotation file"}
                         />
                         <TextInput
-                            key='dsname2'
-                            value={'datasets/mydataset/images'}
+                            key='dsdir'
+                            value={properties['dir'] } 
                             isPassword={false}
-                            onChange={(event: React.ChangeEvent<HTMLInputElement>) => onChange('dsname2', event.target.value)}
+                            onChange={(event: React.ChangeEvent<HTMLInputElement>) => onChange('dir', event.target.value)}
                             label={"Dataset image directory"}
                         />
                         <TextInput
-                            key='dsname3'
-                            value={'0.7'}
+                            key='dsplit'
+                            value={properties['split'] } 
                             isPassword={false}
-                            onChange={(event: React.ChangeEvent<HTMLInputElement>) => onChange('dsname3', event.target.value)}
+                            onChange={(event: React.ChangeEvent<HTMLInputElement>) => onChange('split', event.target.value)}
                             label={"Share of data to be used for training"}
                          />
                         </div>
