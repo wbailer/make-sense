@@ -14,6 +14,7 @@ import { CSSHelper } from "../../logic/helpers/CSSHelper";
 import { ClipLoader } from "react-spinners";
 import ImportLabelPopup from "./ImportLabelPopup/ImportLabelPopup";
 import ExportLabelPopup from "./ExportLabelsPopup/ExportLabelPopup";
+import ExportFewShotProperties from "./ExportFewShotProperties/ExportFewShotProperties"
 
 interface IProps {
     activePopupType: PopupWindowType;
@@ -55,6 +56,8 @@ const PopupView: React.FC<IProps> = ({ activePopupType }) => {
                 return <FewShotProjectProperties isUpdate={true} />;
             case PopupWindowType.FEW_SHOT_PROPERTIES_INIT:
                 return <FewShotProjectProperties isUpdate={false} />;
+            case PopupWindowType.EXPORT_FEW_SHOT_PROPERTIES:
+                    return <ExportFewShotProperties  />;
             default:
                 return null;
         }

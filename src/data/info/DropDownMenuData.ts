@@ -73,7 +73,7 @@ export const DropDownMenuData: DropDownMenuNode[] = [
                 imageSrc: "ico/export-fs.png",
                 imageAlt: "properties",
                 disabled: false,
-                onClick: () => store.dispatch(updateActivePopupType(PopupWindowType.EXPORT_FEW_SHOT))
+                onClick: () => store.dispatch(updateActivePopupType(PopupWindowType.EXPORT_FEW_SHOT_PROPERTIES))
             },
         ]
     },
