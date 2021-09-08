@@ -24,6 +24,7 @@ interface IProps {
 }
 
 const FewShotProjectProperties: React.FC<IProps> = (
+
     {
         projectType,
         updateActivePopupType,
@@ -32,7 +33,7 @@ const FewShotProjectProperties: React.FC<IProps> = (
     }) => {
     const initialProps = FewshotSelector.getProperties();
     const [properties, setProperties] = useState<Map<String,String>>(initialProps);
-
+   
 
     const onChange = (key: string, value: string) => {
         const newProperties = { ...properties, [key]: value };
@@ -57,7 +58,6 @@ const FewShotProjectProperties: React.FC<IProps> = (
     const onUpdateReject = () => {
         updateActivePopupType(null);
     };
-
 
 
     const onSelect = (baseModel: BaseModel) => {
@@ -134,7 +134,7 @@ const FewShotProjectProperties: React.FC<IProps> = (
                             value={properties['dir'] } 
                             isPassword={false}
                             onChange={(event: React.ChangeEvent<HTMLInputElement>) => onChange('dir', event.target.value)}
-                            label={"Dataset image directory"}
+                            label={"Dataset image directory (absolute or relative to datasets/)"}
                         />
                         <TextInput
                             key='dsplit'

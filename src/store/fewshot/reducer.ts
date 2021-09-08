@@ -6,7 +6,7 @@ import { getBaseModel } from "../../data/enums/BaseModel";
 const initialState: FewshotState = {
     baseModel: BaseModel.COCO60,
     datafile: "datasets/mydataset/mydataset.json",
-    datadir: "datasets/mydataset/images",
+    datadir: "mydataset/images",
     datasplit: 0.7,
     name: "mydataset"
 };
