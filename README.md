@@ -13,3 +13,7 @@ This version supports setting up a few-shot training task using [our version](ht
 - Use polygon annotations.
 - The exporter will provide three files: the annotations in COCO format, the training configuration in YAML format and the script for running the training. The export dialog provides information where to put these files.
 - To run the training, make the downloaded script exectuable using ```chmod +x <filename>```.
+
+### Acknowledgement
+
+This work has received funding from the European Union’s Horizon 2020 Research and Innovation Programme under grant agreement No 951911 ([AI4Media](https://www.ai4media.eu/)) and from the program ICT of the Future of the Austrian Federal Ministry of Climate Action, Environment, Energy, Mobility, Innovation and Technology (BMK).
