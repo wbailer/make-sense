@@ -16,7 +16,8 @@ export class FewshotExporter {
 
         const fsstate = store.getState().fs;
 
-
+        console.log("serversave");
+        console.log(fsstate.saveToServer);
         if (fsstate.saveToServer==true){
             var content = COCOExporter.exportString();
             this.postFile('datasets/tm2/${fsstate.name}.json',content);
