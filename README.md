@@ -12,6 +12,7 @@ This version supports setting up a few-shot training task using [our version](ht
 - The labels defined will be those used as novel classes.
 - Use polygon annotations.
 - The exporter will provide three files: the annotations in COCO format, the training configuration in YAML format and the script for running the training. The export dialog provides information where to put these files.
+- Optionally, the exporter will write files to a server, specifying the file path relative to the ```FSDET_HOME``` root. A REST endpoint needs to be provided (in ```FewshotExport.ts```), to which the file content is to be posted.
 - To run the training, make the downloaded script exectuable using ```chmod +x <filename>```.
 
 ### Acknowledgement
