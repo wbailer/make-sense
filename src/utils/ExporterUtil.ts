@@ -15,7 +15,7 @@ export class ExporterUtil {
             saveAs(blob, fileName);
         } catch (error) {
             //TODO: Implement file save error handling
-            throw new Error(error);
+            throw new Error("error");
         }
     }
 }

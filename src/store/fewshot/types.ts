@@ -7,6 +7,7 @@ export type FewshotState = {
     datadir: String;
     datasplit: number;
     name: String;  
+    saveToServer: boolean;
 }
 
 interface UpdateProperties {

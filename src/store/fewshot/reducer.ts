@@ -8,7 +8,8 @@ const initialState: FewshotState = {
     datafile: "datasets/mydataset/mydataset.json",
     datadir: "mydataset/images",
     datasplit: 0.7,
-    name: "mydataset"
+    name: "mydataset",
+    saveToServer: false,
 };
 
 export function fewshotReducer(
@@ -22,8 +23,9 @@ export function fewshotReducer(
                 name: action.payload.props['name'],
                 datafile: action.payload.props['file'],
                 datadir: action.payload.props['dir'],
-                datasplit: +action.payload.props['split'],
-                baseModel: getBaseModel(action.payload.props['basetype'])
+                datasplit: action.payload.props['split'],
+                baseModel: getBaseModel(action.payload.props['basetype']),
+                saveToServer: action.payload.props['saveToServer'] 
             }
         }
   

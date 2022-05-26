@@ -16,6 +16,12 @@ export class FewshotExporter {
 
         const fsstate = store.getState().fs;
 
+
+        if (fsstate.saveToServer==true){
+            var content = COCOExporter.exportString();
+            this.postFile('datasets/tm2/${fsstate.name}.json',content);
+        } 
+
         COCOExporter.exportWithName(`${fsstate.name}.json`);
 
     }
@@ -35,6 +41,11 @@ export class FewshotExporter {
         content = content + '\n  data_split: ' + fsstate.datasplit;  
 
         const fileName: string = `${training_problem_name}.yaml`;
+
+        if (fsstate.saveToServer==true){
+            this.postFile('config/custom_configs/'+fileName,content);
+        } 
+
         ExporterUtil.saveAs(content, fileName);
     }
 
@@ -46,6 +57,30 @@ export class FewshotExporter {
         var content = `cd $FSDET_ROOT\npython train_few_shot.py --datasetconfig configs/custom_datasets/${training_problem_name}.yaml --ignoreunknown`;
     
         const fileName: string = `run_${training_problem_name}.sh`;
+
+        if (fsstate.saveToServer==true){
+            this.postFile(fileName,content);
+        } 
+
         ExporterUtil.saveAs(content, fileName);
     } 
+
+    private static async postFile(name: String, content: string){
+
+        const baseUrl = "http://localhost:3010/store?name=";
+
+        var myUrl = baseUrl + name;
+
+        const response = await fetch(myUrl, {
+            method: 'POST',
+            body: content,
+            headers: {'Content-Type': 'text/plain; charset=UTF-8'} });
+          
+          if (!response.ok) { console.log("POST of file failed") }
+        
+
+    } 
+
+
+    
 }

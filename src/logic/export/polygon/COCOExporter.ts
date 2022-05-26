@@ -36,6 +36,15 @@ export class COCOExporter {
         ExporterUtil.saveAs(content, fileName);
     }
 
+    public static exportString(): string {
+        const imagesData: ImageData[] = LabelsSelector.getImagesData();
+        const labelNames: LabelName[] = LabelsSelector.getLabelNames();
+        const projectName: string = GeneralSelector.getProjectName();
+        const COCOObject: COCOObject = COCOExporter.mapImagesDataToCOCOObject(imagesData, labelNames, projectName);
+        const content: string = JSON.stringify(COCOObject);
+        return content;
+    }
+
     private static mapImagesDataToCOCOObject(
         imagesData: ImageData[],
         labelNames: LabelName[],
