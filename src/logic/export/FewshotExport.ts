@@ -44,7 +44,7 @@ export class FewshotExporter {
         const fileName: string = `${training_problem_name}.yaml`;
 
         if (fsstate.saveToServer==true){
-            this.postFile('config/custom_configs/'+fileName,content);
+            this.postFile('configs/custom_datasets/'+fileName,content);
         } 
 
         ExporterUtil.saveAs(content, fileName);
