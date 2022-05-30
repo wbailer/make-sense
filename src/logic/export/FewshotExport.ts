@@ -26,10 +26,6 @@ export class FewshotExporter {
             this.postFile(`datasets/tm2/${dsname}.json`,content);
         } 
 
-<<<<<<< HEAD
-=======
-        var dsname = fsstate.name
->>>>>>> 8e3a60726190f577683f3993864a3bf8d9d310e8
         COCOExporter.exportWithName(`${dsname}.json`);
 
     }
