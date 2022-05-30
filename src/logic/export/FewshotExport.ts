@@ -18,12 +18,15 @@ export class FewshotExporter {
 
         console.log("serversave");
         console.log(fsstate.saveToServer);
+
+        var dsname = fsstate.name
+ 
         if (fsstate.saveToServer==true){
             var content = COCOExporter.exportString();
-            this.postFile('datasets/tm2/${fsstate.name}.json',content);
+            this.postFile(`datasets/tm2/${dsname}.json`,content);
         } 
 
-        COCOExporter.exportWithName(`${fsstate.name}.json`);
+        COCOExporter.exportWithName(`${dsname}.json`);
 
     }
 
